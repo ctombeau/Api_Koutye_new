@@ -12,6 +12,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.stereotype.Component;
 
 import com.chrisnor.koutye.dto.UtilisateurDto;
 import com.chrisnor.koutye.model.Utilisateur;
@@ -20,7 +21,7 @@ import com.chrisnor.koutye.service.serviceimpl.UtilisateurServiceImpl;
 @Aspect
 public class LoginAspect {
 	Logger logger = Logger.getLogger(LoginAspect.class.getName());
-	long t1, t2;
+	long t1, t2; 
 	
 	public LoginAspect() throws IOException{
 		logger.addHandler(new FileHandler("log4j2.xml"));

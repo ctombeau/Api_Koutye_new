@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -64,6 +65,9 @@ import lombok.NoArgsConstructor;
 @PersistenceContext
 @Transactional 
 public class UtilisateurServiceImpl implements UtilisateurService{
+	@Value("${expiration_Date}")
+	private int expirationDate;
+	
     @Autowired
 	private PasswordEncoder passwordEncoder;
 	
@@ -253,7 +257,7 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		JwtClaimsSet jwtClaimsSet = JwtClaimsSet
 									.builder()
 									.issuedAt(instant)
-									.expiresAt(instant.plus(10,ChronoUnit.MINUTES))
+									.expiresAt(instant.plus(expirationDate,ChronoUnit.MINUTES))
 									.subject(username)
 									.claim("scope", scope)
 									.build();

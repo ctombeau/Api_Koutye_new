@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.antlr.v4.runtime.misc.NotNull;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,6 +24,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,6 +33,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor 
 @AllArgsConstructor
 @Entity
+@DynamicInsert
 public class Appartement implements Serializable {
 	/**
 	 * 
@@ -43,14 +47,18 @@ public class Appartement implements Serializable {
 	@NotNull
 	private String description;
 	
+	@Column(nullable = false, columnDefinition="default 0.0")
 	private double prix;
 	
+	private String devise;
+	
 	@JsonBackReference
+	//@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name="utilisateur_id")
 	private Utilisateur utilisateur;
 	
-	//@JsonBackReference
+	
 	@JsonManagedReference
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="adresse_id")
@@ -61,12 +69,10 @@ public class Appartement implements Serializable {
 	private List<Ferme> ferme;
 	
 	@JsonManagedReference
-	//@JsonIgnore
 	@OneToMany(mappedBy="appartement", fetch=FetchType.EAGER,cascade = CascadeType.PERSIST)
 	private List<ImageAppartement> imageAppartements;
 	
 	@JsonManagedReference
-	//@JsonIgnore
 	@OneToMany(mappedBy="appartement", fetch=FetchType.LAZY,cascade = CascadeType.PERSIST)
 	private List<VideoAppartement> videoAppartements;
 }

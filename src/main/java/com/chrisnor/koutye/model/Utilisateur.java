@@ -10,6 +10,7 @@ import java.util.List;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -107,9 +108,10 @@ public class Utilisateur implements Serializable{
   @JoinColumn(name="id_type")
   private TypeUtilisateur typeUtilisateur;
   
+  //@JsonBackReference
   @JsonManagedReference
   //@JsonIgnore
-  @OneToMany (mappedBy="utilisateur", fetch=FetchType.LAZY, cascade = CascadeType.PERSIST)
+  @OneToMany (mappedBy="utilisateur", fetch=FetchType.LAZY) //, cascade = CascadeType.PERSIST)
   private List<Appartement> appartements;
   
   
