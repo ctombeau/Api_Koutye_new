@@ -1,5 +1,6 @@
 package com.chrisnor.koutye.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,6 @@ public interface AppartementService {
 	public List<Appartement> getAppartementByCommune(String commune);
 	public List<ImageAppartement> postImageAppartement(Long idApp,List<String> paths);
 	public List<VideoAppartement> postVideoAppartement(Long idApp,List<String> paths);
-	public boolean deleteImage(Long id);
+	public boolean deleteImage(Long id) throws IOException;
 	public boolean deleteVideo(Long id);
 }

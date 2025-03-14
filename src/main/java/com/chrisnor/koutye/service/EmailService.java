@@ -14,4 +14,6 @@ public interface EmailService {
      void sendMessageUsingThymeleafTemplateAttach(
   			String emailTo, String subject, Map<String, Object> templateModel)
   			throws MessagingException;
+     void sendMessageUsingThymeleafTemplateForgot(String emailTo, String subject,
+ 			Map<String, Object> templateModel) throws MessagingException;
 }

@@ -1,5 +1,6 @@
 package com.chrisnor.koutye.service.serviceimpl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +25,7 @@ import com.chrisnor.koutye.repository.ImageAppartementRepository;
 import com.chrisnor.koutye.repository.VideoAppartementRepository;
 import com.chrisnor.koutye.service.AppartementService;
 import com.chrisnor.koutye.service.UtilisateurService;
+import com.chrisnor.koutye.utils.ConvertImage;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -111,12 +113,23 @@ public class AppartementServiceImpl implements AppartementService{
 	@Override
 	public List<Appartement> getAppartementByUsername(String username) {
 		List<Appartement> apps = new ArrayList<>();
+		List<ImageAppartement> imgApps = new ArrayList<>();
 		Optional<UtilisateurDto> utilDto = utilService.getUtilisateur(username);
 		if(utilDto.isPresent() && !utilDto.get().getNomType().equals("Locataire"))
 		{
 			Utilisateur util = modelMapper.map(utilDto, Utilisateur.class);
 			apps = appRepo.findByUtilisateur(util);
+			/*
+			apps.forEach(
+					app->app.getImageAppartements().forEach(
+				 imgApp->imgApps.add(imgApp.setImage(new ConvertImage().extractBytes(imgApp.getImage()))))
+				  
+			);
 			
+			apps.forEach(app->{
+				 app.setImageAppartements(imgApps);
+			});	
+			*/	
 			return apps;
 		}
 		return null;
@@ -174,7 +187,7 @@ public class AppartementServiceImpl implements AppartementService{
 	}
 
 	@Override
-	public boolean deleteImage(Long id) {
+	public boolean deleteImage(Long id) throws IOException{
 		Optional<ImageAppartement> imgApp = imgRepo.findById(id);
 		if(imgApp.isPresent())
 		{

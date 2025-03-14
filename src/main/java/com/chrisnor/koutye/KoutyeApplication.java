@@ -64,14 +64,6 @@ public class KoutyeApplication {
 			typeRepo.save(TypeUtilisateur.builder().nomType("Proprietaire").build());
 		};
 	}
-	//@Bean
-	CommandLineRunner commandLineRunner2(ClientRepository clientRepo) {
-		return args->{
-			clientRepo.save(Client.builder().username("ctombeau").password("1234").build());
-			clientRepo.save(Client.builder().username("jedma").password("1234").build());
- 
-		};
-	}
 	
 	
 }

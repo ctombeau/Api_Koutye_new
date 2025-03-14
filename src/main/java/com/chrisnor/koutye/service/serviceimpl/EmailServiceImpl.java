@@ -93,4 +93,14 @@ public class EmailServiceImpl implements EmailService{
 		
 	}
 	
+	@Override
+	public void sendMessageUsingThymeleafTemplateForgot(String emailTo, String subject,
+			Map<String, Object> templateModel) throws MessagingException {
+			   Context thymeleafContext = new Context();
+			   thymeleafContext.setVariables(templateModel);
+			   String htmlBody = templateEngine.process("defaultPassword", thymeleafContext);
+			   sendHtmlMessage(emailTo, subject, htmlBody);	
+		
+	}
+	
 }

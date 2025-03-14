@@ -1,7 +1,11 @@
 package com.chrisnor.koutye.controller;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,13 +36,19 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/api")
-@AllArgsConstructor
 @EnableMethodSecurity
 public class AppartementController {
 	
+	@Value("${directoryPath}")
+	private String directoryApp;
+	
+	@Autowired
 	private AppartementService appService;
+	@Autowired
 	private AppartementRepository appRepo;
+	@Autowired
 	private ResponseGenerator responseGenerator;
+	
 	
 	@PostMapping("/appartement/add")
 	@PreAuthorize("hasAuthority('SCOPE_Proprietaire')")
@@ -82,7 +92,8 @@ public class AppartementController {
 	@PostMapping("/appartement/add-image")
 	public ResponseEntity<?> addImageAppartement(@RequestParam Long idApp, @RequestParam List<MultipartFile> images)
 	{
-		String directory = "C:/Koutye_Folder/ImageApp/"+idApp;
+		//String directory = "C:/Koutye_Folder/ImageApp/"+idApp;
+		String directory = directoryApp+idApp;
 		System.out.println(directory);
 		List<String> paths = new FileUpload().UploadAllFiles(images, directory);
 		
@@ -99,7 +110,7 @@ public class AppartementController {
 	@PostMapping("/appartement/add-video")
 	public ResponseEntity<?> addVideoAppartement(@RequestParam Long idApp, @RequestParam List<MultipartFile> videos)
 	{
-		String directory = "C:/Koutye_Folder/VideoApp/"+idApp;
+		String directory = directoryApp+idApp;
 		System.out.println(directory);
 		List<String> paths = new FileUpload().UploadAllFiles(videos, directory);
 		
@@ -113,7 +124,7 @@ public class AppartementController {
 	}
 	
 	@GetMapping("/appartement/delete-image/{id}")
-	public ResponseEntity<?> removeImage(@PathVariable Long id)
+	public ResponseEntity<?> removeImage(@PathVariable Long id) throws IOException
 	{	
 		boolean result = appService.deleteImage(id);
 		if(result)

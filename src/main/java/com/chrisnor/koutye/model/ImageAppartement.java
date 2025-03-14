@@ -1,12 +1,14 @@
 package com.chrisnor.koutye.model;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.Blob;
 
 import org.antlr.v4.runtime.misc.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import static com.chrisnor.koutye.utils.ConvertImage.extractBytes;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
@@ -22,6 +24,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Data 
@@ -46,4 +49,9 @@ public class ImageAppartement implements Serializable{
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="appartement_id")
 	private Appartement appartement;
+	
+//	public byte[] getImage() throws IOException {
+//		System.out.println(extractBytes(this.image));
+//		return extractBytes(this.image);
+//	}
 }

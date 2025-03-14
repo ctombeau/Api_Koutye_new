@@ -272,7 +272,6 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	@Override
 	public Optional<UtilisateurDto> getUtilisateurByEmail(String email) {
 		Utilisateur util = utilisateurRepo.findUtilisateurByEmail(email);
-
 		if(util != null)
 		{
 			return Optional.of(modelMapper.map(util, UtilisateurDto.class));
@@ -287,7 +286,7 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	public String generateDefaultPassword() 
 	{
         String str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                + "abcdefghijklmnopqrstuvxyz"
+                + "abcdefghijklmnopqrstuvwxyz"
         		+ "0123456789"
                 +"@#$"; 
 
@@ -314,13 +313,9 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	@Override
 	public boolean verifyEmail(String email) {
 		Optional<UtilisateurDto> util = this.getUtilisateurByEmail(email);
-		if(util != null)
-		{
-			return true;
-		}
-		else
-		  return false;
+		return util != null; 	
 	}
+	
     /*
 	@Override
 	public List<UtilisateurDto> getUtilisateurs() {
@@ -413,5 +408,16 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		}
 		else
 		 return false;
+	}
+
+	@Override
+	public String forgotPassword(String email) {
+		boolean verifyEmail = verifyEmail(email);
+		if(verifyEmail==true) {
+			String defaultPassword = generateDefaultPassword();
+			setPassword(defaultPassword, email);
+		}
+		return null;
+		
 	}
 }  

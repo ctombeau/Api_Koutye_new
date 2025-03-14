@@ -75,6 +75,7 @@ public class UtilisateurServiceImplTest {
 		Utilisateur capturedUtilisateur = utilisateurArgCaptor.getValue();
 		
 		assertThat(capturedUtilisateur).isEqualTo(utilDtoToSave);
+		
 	}
 	
 	@Test

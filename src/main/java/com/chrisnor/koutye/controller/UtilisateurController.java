@@ -227,7 +227,7 @@ public class UtilisateurController {
 			 String defaultPassword = utilService.generateDefaultPassword();
 			 util = utilService.getUtilisateurByEmail(emailTo).get();
 			 utilService.setPassword(defaultPassword, emailTo);
-			 emailService.sendMessageUsingThymeleafTemplate(emailTo, subject, IdentityUserEmail.getIdentityUserEmailPassword(util,defaultPassword));
+			 emailService.sendMessageUsingThymeleafTemplateForgot(emailTo, subject, IdentityUserEmail.getIdentityUserEmailPassword(util,defaultPassword));
 			return responseGenerator.SuccessResponse(HttpStatus.OK, "Mail envoyé avec succès...");
 		}
 		else
