@@ -94,16 +94,13 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		try {
 			TypeUtilisateur typeUtil = typeUtilRepo.findByNomType(utilDto.getNomType());
 			Query q = em.createNativeQuery("update utilisateur set nom=:userNom,prenom=:userPrenom,email=:userEmail,"
-					+ "username=:userName,password=:userPassword,phone=:userPhone,photo=:userPhoto,id_type=:userType,"
+					+ "username=:userName,phone=:userPhone,"
 					+ "modification_date=:userDate where utilisateur_id=:userId",UtilisateurDto.class);
 			q.setParameter("userNom", utilDto.getNom().toUpperCase());
 			q.setParameter("userPrenom", utilDto.getPrenom());
 			q.setParameter("userEmail", utilDto.getEmail());
 			q.setParameter("userName", utilDto.getUsername());
-			q.setParameter("userPassword", passwordEncoder.encode(utilDto.getPassword()));
 			q.setParameter("userPhone", utilDto.getPhone());
-			q.setParameter("userPhoto", utilDto.getPhoto());
-			q.setParameter("userType", typeUtil.getIdType());
 			q.setParameter("userDate", LocalDateTime.now());
 			q.setParameter("userId", id);
 			

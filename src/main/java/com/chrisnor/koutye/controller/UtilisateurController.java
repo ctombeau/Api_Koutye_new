@@ -75,6 +75,9 @@ public class UtilisateurController {
 
 	@Value("${pathUser}")
 	private String userFolder;
+	
+	@Value("${pathUser2}")
+	private String userFolder2;
 
 	@Autowired
 	private UtilisateurService utilService; 
@@ -269,10 +272,13 @@ public class UtilisateurController {
 	public ResponseEntity<?> setProfilePicture(@RequestParam String username, @RequestParam MultipartFile photo) throws FileNotFoundException
 	{
 		String retour;
+		String retour2;
 		retour = new FileUpload().UploadFiles(photo, userFolder +"\\"+ username);
+		retour2 = new FileUpload().UploadFiles(photo, userFolder2 +"\\"+ username);
 		if (retour != null && !retour.equals(""))
 		{
 			retour = retour.replace("\\", "/");
+			retour2 = retour2.replace("\\", "/");
 			utilService.updateProfilePicture(username,retour );
 			return responseGenerator.SuccessResponse(HttpStatus.CREATED, retour);
 		}
