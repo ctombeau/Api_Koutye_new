@@ -161,30 +161,11 @@ public class UtilisateurController {
 	@PutMapping("/user/update/{id}")
 	public ResponseEntity<Response> UpdateUser(@PathVariable Long id, @RequestBody UtilisateurDto utilDto) {
 		UtilisateurDto util = new UtilisateurDto();
-		Utilisateur utilBase = new Utilisateur();
-		
-		utilBase = utilisateurRepo.getById(id);
-		
-		if(utilBase.getEmail().equals(utilDto.getEmail()) && utilBase.getUsername().equalsIgnoreCase(utilDto.getUsername()))
-		{
-			util = utilService.PutUtilisateur(id, utilDto);
+		util = utilService.PutUtilisateur(id, utilDto);
+		if(util != null) 
 			return responseGenerator.SuccessResponse(HttpStatus.OK, util);
-		}
 		else
-		{
-			
-			if(utilService.getUtilisateur(utilDto.getUsername()) != null || utilService.getUtilisateurByEmail(utilDto.getEmail()) != null)
-			{
-				return responseGenerator.ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Erreur lors de la mofification de l'utilisateur");
-			}
-			else
-			{
-				util = utilService.PutUtilisateur(id, utilDto);
-				return responseGenerator.SuccessResponse(HttpStatus.OK, util);
-			}
-			
-		}
-		
+			return responseGenerator.ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Erreur lors de la mofification de l'utilisateur");	
 		
 	}
    
