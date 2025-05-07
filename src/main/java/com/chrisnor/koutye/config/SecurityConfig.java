@@ -38,6 +38,7 @@ import com.chrisnor.koutye.service.serviceimpl.UtilisateurServiceImpl;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -71,7 +72,7 @@ public class SecurityConfig{
 		return http
 				.sessionManagement(sm->sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.csrf(csrf->csrf.disable())
-				.authorizeRequests(ar->ar.requestMatchers("/api/login/**").permitAll())
+				.authorizeRequests(ar->ar.requestMatchers("/api/login/**","/api/logout/**").permitAll())
 				.authorizeRequests(ar->ar.requestMatchers("/api/login-first/**").permitAll())
 				.authorizeRequests(ar->ar.requestMatchers("/api/user/add/**").permitAll())
 				.authorizeRequests(ar->ar.requestMatchers("/api/send-email/**").permitAll())
@@ -87,6 +88,14 @@ public class SecurityConfig{
 				.cors(cors -> cors
                         .configurationSource(corsConfigurationSource()))
 //				.cors(cors -> cors.disable())
+				.logout(logout -> logout
+		                .logoutUrl("/api/logout")
+		                .logoutSuccessHandler((request, response, authentication) -> {
+		                    response.setStatus(HttpServletResponse.SC_OK);
+		                })
+		                .invalidateHttpSession(true)
+		                .deleteCookies("JSESSIONID")
+		            )
 				.build();
 	}
 	
