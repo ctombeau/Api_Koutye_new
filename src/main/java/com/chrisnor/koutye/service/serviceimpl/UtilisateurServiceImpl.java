@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -44,9 +45,11 @@ import org.springframework.transaction.annotation.Propagation;
 import com.chrisnor.koutye.dto.UtilisateurDto;
 import com.chrisnor.koutye.exception.InvalidInputException;
 import com.chrisnor.koutye.exception.SqlInsertException;
+import com.chrisnor.koutye.model.ActiveToken;
 import com.chrisnor.koutye.model.Attachement;
 import com.chrisnor.koutye.model.TypeUtilisateur;
 import com.chrisnor.koutye.model.Utilisateur;
+import com.chrisnor.koutye.repository.ActiveTokenRepository;
 import com.chrisnor.koutye.repository.AttachementRepository;
 import com.chrisnor.koutye.repository.TypeUtilisateurRepository;
 import com.chrisnor.koutye.repository.UtilisateurRepository;
@@ -89,6 +92,9 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	
 	@Autowired
 	private AttachementRepository attachRepo;
+	
+	@Autowired
+	private ActiveTokenRepository activeTokenRepo;
 	
 	public UtilisateurDto setUpdate(Long id,UtilisateurDto utilDto)
 	{
@@ -266,21 +272,30 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	@Override
 	public Map<String, Object> GenerateToken(String username, Authentication authentication) {
 		Instant instant = Instant.now();
+		String id = UUID.randomUUID().toString();
 		
-		String scope = authentication.getAuthorities().stream().map(a->a.getAuthority()).collect(Collectors.joining(" "));
-		JwtClaimsSet jwtClaimsSet = JwtClaimsSet
+		String scope = authentication.getAuthorities()
+				                     .stream()
+				                     .map(a->a.getAuthority())
+				                     .collect(Collectors.joining(" "));
+		
+		JwtClaimsSet claims = JwtClaimsSet
 									.builder()
+									.id(id)
 									.issuedAt(instant)
 									.expiresAt(instant.plus(expirationDate,ChronoUnit.MINUTES))
 									.subject(username)
 									.claim("scope", scope)
 									.build();
-		JwtEncoderParameters jwtEncoderParameters = JwtEncoderParameters.from(
-									JwsHeader.with(MacAlgorithm.HS512).build(),
-									jwtClaimsSet
-								);
-		String jwt = jwtEncoder.encode(jwtEncoderParameters).getTokenValue();
-		return Map.of("access-token",jwt,"user-info",this.getUtilisateur(username).get());
+		String token = jwtEncoder.encode(JwtEncoderParameters.from(
+                JwsHeader.with(MacAlgorithm.HS512).build(), claims)).getTokenValue();
+		ActiveToken at = new ActiveToken();
+		
+		at.setJti(id);
+		at.setUsername(username);
+		at.setLastActivity(LocalDateTime.now());
+		activeTokenRepo.save(at);
+		return Map.of("access-token",token,"user-info",this.getUtilisateur(username).get());
 	}
 
 	@Override

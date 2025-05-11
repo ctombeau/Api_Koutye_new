@@ -2,6 +2,7 @@ package com.chrisnor.koutye.config;
 
 import java.util.Arrays;
 
+import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
+import com.chrisnor.koutye.service.serviceimpl.JwtServiceImpl;
 import com.chrisnor.koutye.service.serviceimpl.UserDetailServiceImpl;
 import com.chrisnor.koutye.service.serviceimpl.UtilisateurServiceImpl;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
@@ -57,6 +59,7 @@ public class SecurityConfig{
 	
 	@Autowired
 	private UserDetailServiceImpl userDetailServiceImpl;
+	
 	
 	
 	@Bean
@@ -102,7 +105,7 @@ public class SecurityConfig{
 	
 	
 
-
+/*
 	@Bean
 	JwtEncoder jwtEncoder()
 	{
@@ -116,8 +119,28 @@ public class SecurityConfig{
 	{
 		SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(), "RSA");
 		return NimbusJwtDecoder.withSecretKey(secretKeySpec).macAlgorithm(MacAlgorithm.HS512).build();
+		//return NimbusJwtDecoder.withPublicKey(publicKey) // Use public key here
+	       //     .build();
 	}
-	
+*/
+	/*
+	@Bean
+	public SecretKey jwtSecretKey() {
+	    return new SecretKeySpec(jwtService.generateKey().getBytes(), "HmacSHA512");
+	}
+	*/
+	@Bean
+    public JwtDecoder jwtDecoder() {
+        SecretKey key = new SecretKeySpec(secretKey.getBytes(), "HmacSHA512");
+        return NimbusJwtDecoder.withSecretKey(key).macAlgorithm(MacAlgorithm.HS512).build();
+    }
+
+    @Bean
+    public JwtEncoder jwtEncoder() {
+        SecretKey key = new SecretKeySpec(secretKey.getBytes(), "HmacSHA512");
+        return new NimbusJwtEncoder(new ImmutableSecret<>(key));
+    }
+
 	
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception
