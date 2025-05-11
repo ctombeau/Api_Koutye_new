@@ -51,8 +51,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SecurityConfig{
 	
-//	@Autowired
-//	private JwtAuthConverter jwtAuthConverter;
 	
 	@Value("${jwt.secret}")
 	private String secretKey;
@@ -91,44 +89,11 @@ public class SecurityConfig{
 				.cors(cors -> cors
                         .configurationSource(corsConfigurationSource()))
 //				.cors(cors -> cors.disable())
-				.logout(logout -> logout
-		                .logoutUrl("/api/logout")
-		                .logoutSuccessHandler((request, response, authentication) -> {
-		                    response.setStatus(HttpServletResponse.SC_OK);
-		                })
-		                .invalidateHttpSession(true)
-		                .deleteCookies("JSESSIONID")
-		            )
 				.build();
 	}
 	
 	
 	
-
-/*
-	@Bean
-	JwtEncoder jwtEncoder()
-	{
-		return new NimbusJwtEncoder(new ImmutableSecret<>(secretKey.getBytes()));
-	}
-	
-
-	
-	@Bean
-	JwtDecoder jwtDecoder()
-	{
-		SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(), "RSA");
-		return NimbusJwtDecoder.withSecretKey(secretKeySpec).macAlgorithm(MacAlgorithm.HS512).build();
-		//return NimbusJwtDecoder.withPublicKey(publicKey) // Use public key here
-	       //     .build();
-	}
-*/
-	/*
-	@Bean
-	public SecretKey jwtSecretKey() {
-	    return new SecretKeySpec(jwtService.generateKey().getBytes(), "HmacSHA512");
-	}
-	*/
 	@Bean
     public JwtDecoder jwtDecoder() {
         SecretKey key = new SecretKeySpec(secretKey.getBytes(), "HmacSHA512");

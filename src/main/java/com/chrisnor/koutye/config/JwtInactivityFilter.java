@@ -48,8 +48,8 @@ public class JwtInactivityFilter extends OncePerRequestFilter{
 
             ActiveToken activeToken = opt.get();
             LocalDateTime lastActivity = activeToken.getLastActivity();
-            if (lastActivity.plusMinutes(10).isBefore(LocalDateTime.now())) {
-            	System.out.println("10 mn arrivee");
+            if (lastActivity.plusMinutes(5).isBefore(LocalDateTime.now())) {
+            	System.out.println("5 mn arrivee");
                 activeTokenRepository.deleteById(jti); // optionnel : nettoyer
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;

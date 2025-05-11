@@ -15,15 +15,6 @@ import java.util.Base64;
 
 @Configuration
 public class JwtConfig {
-	@Value("${jwt.secret}")
-    private String secret;
+
 	
-	@Autowired
-    private JwtServiceImpl jwtService;
-	/*
-    @Bean
-    public SecretKey jwtSecretKey() {
-    	return new SecretKeySpec(jwtService.generateKey().getBytes(), "HmacSHA512");
-    }
-    */
 }
