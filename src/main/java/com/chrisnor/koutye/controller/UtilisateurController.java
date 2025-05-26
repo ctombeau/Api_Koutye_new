@@ -25,6 +25,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -40,6 +41,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
@@ -66,6 +68,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 //@CrossOrigin("*")
 @RestController
@@ -265,17 +268,6 @@ public class UtilisateurController {
 		}
 		else
 			throw new FileNotFoundException();
-	}
-	
-	@PostMapping("/attach-user")
-	public ResponseEntity<?> attachUsers(@RequestParam String usernamePro, @RequestParam String usernameCour)
-	{
-		System.out.println("Test de submit via email");
-		boolean result = utilService.postAttachUsers(usernamePro, usernameCour);
-		if(result == true)
-			return responseGenerator.SuccessResponse(HttpStatus.OK, "Utilisateurs attachés avec succès");
-		else
-			return responseGenerator.ErrorResponse(HttpStatus.BAD_REQUEST, "Les utilisateurs ne sont pas attachés.");
 	}
 	
 	@GetMapping("/show-attach-users")

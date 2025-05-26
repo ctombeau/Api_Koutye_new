@@ -60,7 +60,6 @@ public class EmailServiceImpl implements EmailService{
 		mimeMessageHelper.addAttachment(fileSystem.getFilename(), fileSystem);
 		mailSender.send(mimeMessage);
 		
-		System.out.println("Mail attachement envoye avec succes");
 	}
 	@Override
 	public void sendHtmlMessage(String emailTo, String subject, String htmlBody) throws MessagingException {

@@ -79,6 +79,7 @@ public class SecurityConfig{
 				.authorizeRequests(ar->ar.requestMatchers("/api/send-email/**").permitAll())
 				.authorizeRequests(ar->ar.requestMatchers("/api/reset-password/**").permitAll())
 				.authorizeRequests(ar->ar.requestMatchers("/api/attach-user/**").permitAll())
+				.authorizeRequests(ar->ar.requestMatchers("/api/confirmation-success/**", "/api/confirmation-error/**").permitAll())
 				.authorizeRequests(ar->ar.anyRequest().authenticated())
 				//.httpBasic(Customizer.withDefaults())
 				//.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)

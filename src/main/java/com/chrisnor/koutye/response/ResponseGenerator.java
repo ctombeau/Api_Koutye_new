@@ -19,6 +19,8 @@ public class ResponseGenerator {
 	public ResponseEntity<Response> SuccessResponse(HttpStatus status, Object object)
 	{
 		Response res = new Response();
+		if(object instanceof String s)
+		  res.setMessage(s);
 		res.setObject(object);
 		res.setSuccess(true);
 		return ResponseEntity.status(status).body(res);
