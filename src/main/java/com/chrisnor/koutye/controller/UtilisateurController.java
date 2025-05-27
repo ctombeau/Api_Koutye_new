@@ -271,6 +271,7 @@ public class UtilisateurController {
 	}
 	
 	@GetMapping("/show-attach-users")
+	@PreAuthorize("hasAuthority('SCOPE_Proprietaire')")
 	public ResponseEntity<?> showAttachUsers(@RequestParam String username)
 	{
 		List<UtilisateurDto> utilDto = utilService.getUserAttachment(username);
