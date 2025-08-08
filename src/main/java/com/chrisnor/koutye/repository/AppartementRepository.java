@@ -20,10 +20,10 @@ public interface AppartementRepository extends CrudRepository<Appartement, Long>
 	
 	@Modifying
 	@Query(
-			  value = "INSERT INTO appartement (adresse_id, utilisateur_id,description) "
-			  		+ "VALUES(?1,?2,?3)", 
+			  value = "INSERT INTO appartement (adresse_id, utilisateur_id,description,prix,devise) "
+			  		+ "VALUES(?1,?2,?3,?4,?5)", 
 			  nativeQuery = true)
-	public int saveAppartement(@Param("adresse_id") Long adresse_id, @Param("utilisateur_id") Long utilisateur_id, @Param("description") String description);
+	public int saveAppartement(@Param("adresse_id") Long adresse_id, @Param("utilisateur_id") Long utilisateur_id, @Param("description") String description,@Param("prix") double prix, @Param("devise") String devise);
 
     @Query(value="SELECT a.appartement_id,a.description,adr.numero, adr.commune, adr.departement, adr.pays, adr.rue,\r\n"
     		+ "  u.nom,u.prenom,u.username,u.email from appartement a\r\n"

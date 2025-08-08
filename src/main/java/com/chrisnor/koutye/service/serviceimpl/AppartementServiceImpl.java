@@ -116,7 +116,7 @@ public class AppartementServiceImpl implements AppartementService{
 		double prix = app.getPrix();
 		String devise = app.getDevise();
 		
-		int response = appRepo.saveAppartement( adresse_id, utilisateur_id, description);
+		int response = appRepo.saveAppartement( adresse_id, utilisateur_id, description, prix, devise);
 		if(response > 0)
 			return modelMapper.map(app, AppartementDto.class);
 		else
