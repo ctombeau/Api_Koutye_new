@@ -32,4 +32,5 @@ public interface UtilisateurService {
 	public List<UtilisateurDto> getUserAttachment(String username);
 	public boolean getdetachUsers(String usernamePro, String usernameCour);
 	public String forgotPassword(String email);
+	public void deleteProfilePicture(String username);
 }

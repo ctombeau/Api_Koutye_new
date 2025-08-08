@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.antlr.v4.runtime.misc.NotNull;
 
-import com.chrisnor.koutye.model.Adresse;
 import com.chrisnor.koutye.model.Ferme;
 import com.chrisnor.koutye.model.ImageAppartement;
 import com.chrisnor.koutye.model.Utilisateur;
@@ -34,13 +33,16 @@ public class AppartementDto implements Serializable{
 	
 	private String description;
 	
+	private double prix;
+	
+	private String devise;
+	
 	private String username;
-	//private Utilisateur utilisateur;
 	
-	private Adresse adresse;
+	private AdresseDto adresse;
 	
-	private List<ImageAppartement> imageAppartements;
+	//private List<ImageAppartement> imageAppartements;
 	
-	private List<VideoAppartement> videoAppartements;
+	//private List<VideoAppartement> videoAppartements;
 	
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -42,6 +43,9 @@ public class AppartementController {
 	@Value("${directoryPath}")
 	private String directoryApp;
 	
+	@Value("${directoryPath2}")
+	private String directoryApp2;
+	
 	@Autowired
 	private AppartementService appService;
 	@Autowired
@@ -50,12 +54,13 @@ public class AppartementController {
 	private ResponseGenerator responseGenerator;
 	
 	
-	@PostMapping("/appartement/add")
+	@PostMapping(value="/appartement/add")
 	@PreAuthorize("hasAuthority('SCOPE_Proprietaire')")
 	//@ResponseBody
 	public ResponseEntity<Response> AddAppartement(@RequestBody AppartementDto app)
 	{
-		
+		System.out.println("Test de l'application");
+		System.out.println(app);
 		AppartementDto appDto = appService.addAppartement(app);
 		
 		if(appDto != null)
@@ -92,12 +97,9 @@ public class AppartementController {
 	@PostMapping("/appartement/add-image")
 	public ResponseEntity<?> addImageAppartement(@RequestParam Long idApp, @RequestParam List<MultipartFile> images)
 	{
-		//String directory = "C:/Koutye_Folder/ImageApp/"+idApp;
 		String directory = directoryApp+idApp;
 		System.out.println(directory);
 		List<String> paths = new FileUpload().UploadAllFiles(images, directory);
-		
-		// paths.forEach(p->p.replace("\\", "/"));
 		
 		List<ImageAppartement> imgSave = appService.postImageAppartement(idApp, paths);
 		if(imgSave != null)
@@ -110,11 +112,9 @@ public class AppartementController {
 	@PostMapping("/appartement/add-video")
 	public ResponseEntity<?> addVideoAppartement(@RequestParam Long idApp, @RequestParam List<MultipartFile> videos)
 	{
-		String directory = directoryApp+idApp;
+		String directory = directoryApp2+idApp;
 		System.out.println(directory);
 		List<String> paths = new FileUpload().UploadAllFiles(videos, directory);
-		
-		// paths.forEach(p->p.replace("\\", "/"));
 		
 		List<VideoAppartement> videoSave = appService.postVideoAppartement(idApp, paths);
 		if(videoSave != null)

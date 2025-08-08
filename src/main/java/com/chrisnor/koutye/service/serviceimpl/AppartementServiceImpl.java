@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.chrisnor.koutye.dto.AdresseDto;
 import com.chrisnor.koutye.dto.AppartementDto;
 import com.chrisnor.koutye.dto.UtilisateurDto;
 import com.chrisnor.koutye.file.FileUpload;
@@ -97,11 +98,23 @@ public class AppartementServiceImpl implements AppartementService{
 		Optional<UtilisateurDto> util = utilService.getUtilisateur(app.getUsername());
 		Utilisateur utilisateur = modelMapper.map(util, Utilisateur.class);
 		
-		Adresse adr = adrRepo.save(app.getAdresse());
+		AdresseDto adresseDto = app.getAdresse();
+
+		Adresse adresse = new Adresse();
+		adresse.setNumero(adresseDto.getNumero());
+		adresse.setRue(adresseDto.getRue());
+		adresse.setCommune(adresseDto.getCommune());
+		adresse.setDepartement(adresseDto.getDepartement());
+		adresse.setPays(adresseDto.getPays());
+
+		// Sauvegarder
+		Adresse adr = adrRepo.save(adresse);
 		
 		Long adresse_id = adr.getIdAdresse();
 		Long utilisateur_id = utilisateur.getUtilisateurId();
 		String description = app.getDescription();
+		double prix = app.getPrix();
+		String devise = app.getDevise();
 		
 		int response = appRepo.saveAppartement( adresse_id, utilisateur_id, description);
 		if(response > 0)
@@ -119,17 +132,7 @@ public class AppartementServiceImpl implements AppartementService{
 		{
 			Utilisateur util = modelMapper.map(utilDto, Utilisateur.class);
 			apps = appRepo.findByUtilisateur(util);
-			/*
-			apps.forEach(
-					app->app.getImageAppartements().forEach(
-				 imgApp->imgApps.add(imgApp.setImage(new ConvertImage().extractBytes(imgApp.getImage()))))
-				  
-			);
 			
-			apps.forEach(app->{
-				 app.setImageAppartements(imgApps);
-			});	
-			*/	
 			return apps;
 		}
 		return null;

@@ -449,4 +449,13 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 		return null;
 		
 	}
+
+	@Override
+	public void deleteProfilePicture(String username) {
+		Query q = em.createNativeQuery("update utilisateur set photo=:photo,modification_date=:mdate where username=:username");
+		q.setParameter("photo", "")
+		 .setParameter("mdate", LocalDateTime.now())
+		 .setParameter("username", username)
+		 .executeUpdate();
+	}
 }  

@@ -34,8 +34,22 @@ import org.springframework.web.multipart.MultipartFile;
 import com.chrisnor.koutye.exception.FileExcededSizeException;
 import com.chrisnor.koutye.exception.FileNotFoundException;
 
+import jakarta.annotation.PostConstruct;
 
+
+@Component
 public class FileUpload {
+	
+	@Value("${pathAngular}")
+	private String pathAngular;
+	
+	@Value("${pathIonic}")
+	private String pathIonic;
+	
+	@PostConstruct
+	public void init() {
+	    System.out.println("Valeur injectée de pathAngular = " + pathAngular);
+	}
 	
 	public static void saveFile(String uploadDir, String FileName, MultipartFile multipartFile) throws IOException
 	{
@@ -60,8 +74,6 @@ public class FileUpload {
 	public String UploadFiles(MultipartFile multipartFile, String directory)
 			throws FileNotFoundException {
          Path filePath=null;
-         System.out.println("Size: "+ multipartFile.getSize());
-         System.out.println("Content: "+ multipartFile.getContentType());
         try (InputStream inputStream = multipartFile.getInputStream()) {
         	if(!multipartFile.getOriginalFilename().equals(""))
         	{
@@ -119,8 +131,22 @@ public class FileUpload {
 	}
 	
 	public boolean deleteFile(String path)
-	{
-		File file = new File(path);
+	{  
+		System.out.println("Path Angular: "+path);
+		Path cPath = Paths.get(pathAngular,path);
+		String filePath = cPath.toString();
+		System.out.println(filePath);
+		File file = new File(filePath);
+		return file.delete();
+	}
+	
+	public boolean deleteFile2(String path)
+	{  
+		System.out.println("Path Ionic: "+path);
+		Path cPath = Paths.get(pathIonic,path);
+		String filePath = cPath.toString();
+		System.out.println(filePath);
+		File file = new File(filePath);
 		return file.delete();
 	}
 	

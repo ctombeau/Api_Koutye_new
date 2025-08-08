@@ -46,6 +46,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
+import com.chrisnor.koutye.dto.DeletePictureRequest;
 import com.chrisnor.koutye.dto.LoginDto;
 import com.chrisnor.koutye.dto.LoginForgetPasswordDto;
 import com.chrisnor.koutye.dto.UtilisateurDto;
@@ -70,7 +71,6 @@ import java.util.Locale;
 import java.util.Map;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-//@CrossOrigin("*")
 @RestController
 @RequestMapping("/api")
 @EnableMethodSecurity(prePostEnabled=true)
@@ -99,6 +99,9 @@ public class UtilisateurController {
 	
 	@Autowired
 	private SpringTemplateEngine templateEngine;
+	
+	@Autowired
+	private FileUpload fileUpload;
 
 	
 	@PostMapping(value="/user/add")
@@ -268,6 +271,27 @@ public class UtilisateurController {
 		}
 		else
 			throw new FileNotFoundException();
+	}
+	
+	@PostMapping("/delete-picture")
+	public ResponseEntity<?> deleteFile(@RequestBody DeletePictureRequest request){
+		if (request.getPath() == null || request.getUsername() == null) {
+            return ResponseEntity.badRequest().body("Paramètres manquants");
+        }      
+		try {
+			boolean isDelete = fileUpload.deleteFile(request.getPath());
+			boolean isDelete2 = fileUpload.deleteFile2(request.getPath());
+			utilService.deleteProfilePicture(request.getUsername());
+			if(isDelete || isDelete2) 
+				return ResponseEntity.ok("Fichier supprimé avec succès.");
+			else
+				return ResponseEntity.status(HttpStatus.CONFLICT)
+						.body("Le fichier n'a pas pu être supprimé.");
+		}
+		catch(Exception e) {
+			 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                     .body("Erreur lors de la suppression du fichier : " + e.getMessage());
+		}
 	}
 	
 	@GetMapping("/show-attach-users")

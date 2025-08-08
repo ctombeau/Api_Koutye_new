@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -20,6 +21,9 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class JwtInactivityFilter extends OncePerRequestFilter{
+	
+	@Value("${expiration_token}")
+	private int expire;
 
     @Autowired
     private JwtServiceImpl jwtService;
@@ -48,7 +52,7 @@ public class JwtInactivityFilter extends OncePerRequestFilter{
 
             ActiveToken activeToken = opt.get();
             LocalDateTime lastActivity = activeToken.getLastActivity();
-            if (lastActivity.plusMinutes(5).isBefore(LocalDateTime.now())) {
+            if (lastActivity.plusMinutes(expire).isBefore(LocalDateTime.now())) {
             	System.out.println("5 mn arrivee");
                 activeTokenRepository.deleteById(jti); // optionnel : nettoyer
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
