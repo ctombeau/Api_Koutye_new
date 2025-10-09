@@ -109,7 +109,7 @@ public class Utilisateur implements Serializable{
   private TypeUtilisateur typeUtilisateur;
   
   //@JsonBackReference
-  @JsonManagedReference
+  //@JsonManagedReference
   //@JsonIgnore
   @OneToMany (mappedBy="utilisateur", fetch=FetchType.LAZY) //, cascade = CascadeType.PERSIST)
   private List<Appartement> appartements;

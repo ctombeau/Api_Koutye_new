@@ -2,6 +2,7 @@ package com.chrisnor.koutye.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -78,6 +79,11 @@ public class AppartementController {
 	public ResponseEntity<?> showAppartementByUsername(@RequestParam String username)
 	{
 		List<Appartement> apps = appService.getAppartementByUsername(username);
+		/*
+		List<AppartementDto> appDtos = apps.stream()
+                 							.map(AppartementDto::new)
+                 							.collect(Collectors.toList());
+         */
 		if(apps != null)
 			return responseGenerator.SuccessResponse(HttpStatus.OK,apps);
 		else
@@ -88,6 +94,11 @@ public class AppartementController {
 	public ResponseEntity<?> showAppartementByCommune(@RequestParam String commune)
 	{
 		List<Appartement> apps = appService.getAppartementByCommune(commune);
+		/*
+		List<AppartementDto> appDtos = apps.stream()
+			                                .map(AppartementDto::new)
+			                                .collect(Collectors.toList());
+	    */
 		if(apps != null)
 			return responseGenerator.SuccessResponse(HttpStatus.OK,apps);
 		else

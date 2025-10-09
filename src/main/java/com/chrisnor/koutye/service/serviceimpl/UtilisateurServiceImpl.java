@@ -125,7 +125,7 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	}
 
 	@Override
-	public UtilisateurDto PutUtilisateur(Long id, UtilisateurDto utilDto) {
+	public UtilisateurDto putUtilisateur(Long id, UtilisateurDto utilDto) {
 		//Utilisateur util = utilisateurRepo.findById(id).get();
 		Utilisateur utilBase = new Utilisateur();
 		utilBase = utilisateurRepo.getById(id);
@@ -186,18 +186,16 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	}
 
 	@Override
-	public void Login(String username, String password) {
-		Utilisateur utilisateur = new Utilisateur();
-		utilisateur = utilisateurRepo.findUtilisateurByUsername(username);
-		            //.orElseThrow(()-> new UsernameNotFoundException("user not found for username: "+username));
-		
-		if(utilisateur != null && passwordEncoder.matches(password, utilisateur.getPassword()))
-		{
-			Query req = em.createNativeQuery("update utilisateur set login_date=? where utilisateur_id=?");
-			req.setParameter(1, LocalDateTime.now());
-			req.setParameter(2, utilisateur.getUtilisateurId());
-			req.executeUpdate();
-		}
+	@Transactional
+	public void login(String username) {
+		Utilisateur utilisateur = utilisateurRepo.findUtilisateurByUsername(username);
+	    
+	    if (utilisateur == null) {
+	        throw new UsernameNotFoundException("Utilisateur non trouvé : " + username);
+	    }
+
+	    utilisateur.setLoginDate(LocalDateTime.now());
+	    utilisateurRepo.save(utilisateur);
 		
 	}
 
@@ -224,7 +222,7 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	
 
 	@Override
-	public UtilisateurDto PostUtilisateur( UtilisateurDto utilDto) {
+	public UtilisateurDto postUtilisateur( UtilisateurDto utilDto) {
 		Utilisateur util = new Utilisateur();
 		TypeUtilisateur typeUtil = new TypeUtilisateur();
 		
@@ -262,7 +260,7 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	}
 
 	@Override
-	public long FindIdTypeByNomType(String nomType) {
+	public long findIdTypeByNomType(String nomType) {
 		
 		Query id = em.createNativeQuery("select id_type from type_utilisateur where nom_type= ?");
 		return 0;
@@ -270,7 +268,7 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 
 	
 	@Override
-	public Map<String, Object> GenerateToken(String username, Authentication authentication) {
+	public Map<String, Object> generateToken(String username, Authentication authentication) {
 		Instant instant = Instant.now();
 		String id = UUID.randomUUID().toString();
 		

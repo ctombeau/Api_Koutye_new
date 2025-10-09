@@ -22,6 +22,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -53,6 +54,7 @@ import com.chrisnor.koutye.dto.UtilisateurDto;
 import com.chrisnor.koutye.dto.UtilisateurFileDto;
 import com.chrisnor.koutye.exception.FileNotFoundException;
 import com.chrisnor.koutye.file.FileUpload;
+import com.chrisnor.koutye.model.ApiResponse;
 import com.chrisnor.koutye.model.Utilisateur;
 import com.chrisnor.koutye.repository.UtilisateurRepository;
 import com.chrisnor.koutye.response.Response;
@@ -105,13 +107,13 @@ public class UtilisateurController {
 
 	
 	@PostMapping(value="/user/add")
-	public ResponseEntity<Response> AjouterUtilisateur(@RequestBody UtilisateurDto utilisateurDto)
+	public ResponseEntity<Response> ajouterUtilisateur(@RequestBody UtilisateurDto utilisateurDto)
 	 {
 		
 		if(utilService.getUtilisateur(utilisateurDto.getUsername()) == null
 				&& utilService.getUtilisateurByEmail(utilisateurDto.getEmail()) == null)
 		{
-			UtilisateurDto util = utilService.PostUtilisateur(utilisateurDto);
+			UtilisateurDto util = utilService.postUtilisateur(utilisateurDto);
 			return responseGenerator.SuccessResponse(HttpStatus.CREATED, util);
 		}
 		else
@@ -121,22 +123,33 @@ public class UtilisateurController {
 	}
 	
 	@PostMapping("/login")
-	public ResponseEntity<Response> Login(@RequestBody LoginDto loginDto)
+	public ResponseEntity<ApiResponse<?>> login(@RequestBody LoginDto loginDto)
 	{
-		Authentication authentication = authenticationManager.authenticate(
+		try {
+			Authentication authentication = authenticationManager.authenticate(
 				 new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword())
 				);
-		Optional<UtilisateurDto> util = utilService.getUtilisateur(loginDto.getUsername());
-		SecurityContextHolder.getContext().setAuthentication(authentication);
+			Optional<UtilisateurDto> util = utilService.getUtilisateur(loginDto.getUsername());
+			SecurityContextHolder.getContext().setAuthentication(authentication);
 		
-		if(authentication.isAuthenticated() && util.get().isActif()==true)	
-		{
-			utilService.Login(loginDto.getUsername(), loginDto.getPassword());
-			return responseGenerator.SuccessResponse(HttpStatus.OK,utilService.GenerateToken(loginDto.getUsername(),authentication));
+			if(util.isPresent() && util.get().isActif())	
+			{
+				System.out.println("success");
+				utilService.login(loginDto.getUsername());
+				Map<String, Object> token = utilService.generateToken(loginDto.getUsername(),authentication);
+				return ResponseEntity.status(HttpStatus.OK)
+						.body(ApiResponse.success("Authentification réussie",token));//(ApiResponse.success("Authentification réussie", null));
+			}
+			System.out.println("compte inactif");
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+		                .body(ApiResponse.error(401, "Compte inactif"));
+		
 		}
-		else
-			return responseGenerator.ErrorResponse(HttpStatus.UNAUTHORIZED, "username et/ou password incorrect");
-		
+		catch(AuthenticationException e) {
+			System.out.println("erreur");
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+	                .body(ApiResponse.error(401, "Nom d'utilisateur et/ou mot de passe incorrect"));
+		}
 	}
 	
 	@PostMapping("/reset-password")
@@ -151,7 +164,7 @@ public class UtilisateurController {
 	}
 	
 	@GetMapping("/user")
-	public ResponseEntity<Response> ShowUser(@RequestParam String username) {
+	public ResponseEntity<Response> showUser(@RequestParam String username) {
 		// System.out.println(username);
 		Optional<UtilisateurDto> utilDto = utilService.getUtilisateur(username);
 
@@ -167,7 +180,7 @@ public class UtilisateurController {
 	@PutMapping("/user/update/{id}")
 	public ResponseEntity<Response> UpdateUser(@PathVariable Long id, @RequestBody UtilisateurDto utilDto) {
 		UtilisateurDto util = new UtilisateurDto();
-		util = utilService.PutUtilisateur(id, utilDto);
+		util = utilService.putUtilisateur(id, utilDto);
 		if(util != null) 
 			return responseGenerator.SuccessResponse(HttpStatus.OK, util);
 		else

@@ -11,6 +11,7 @@ import org.hibernate.annotations.DynamicInsert;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -24,6 +25,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -52,8 +54,9 @@ public class Appartement implements Serializable {
 	
 	private String devise;
 	
-	@JsonBackReference
+	//@JsonBackReference
 	//@JsonManagedReference
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="utilisateur_id")
 	private Utilisateur utilisateur;
@@ -75,4 +78,16 @@ public class Appartement implements Serializable {
 	@JsonManagedReference
 	@OneToMany(mappedBy="appartement", fetch=FetchType.LAZY,cascade = CascadeType.PERSIST)
 	private List<VideoAppartement> videoAppartements;
+	
+	@Transient
+	@JsonProperty("username")
+	public String getUsername() {
+	    return utilisateur != null ? utilisateur.getUsername() : null;
+	}
+	
+	@Transient
+	@JsonProperty("phone")
+	public String getPhone() {
+	    return utilisateur != null ? utilisateur.getPhone() : null;
+	}
 }
