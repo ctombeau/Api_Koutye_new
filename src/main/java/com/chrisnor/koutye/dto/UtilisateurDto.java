@@ -24,6 +24,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -56,6 +57,7 @@ public class UtilisateurDto {
 	  private String password;
 	  
 	  @Column(nullable=false)
+	  @Pattern(regexp = "^[0-9]+$", message = "Le numéro de téléphone doit contenir uniquement des chiffres")
 	  private String phone;
 	  
 	  @Column(nullable=false)
@@ -84,10 +86,4 @@ public class UtilisateurDto {
 	  @Column(name="logout_date",nullable=true)
 	  private LocalDateTime logoutDate;
 	  
-//	  @ManyToOne(cascade=CascadeType.ALL)
-//	  @JoinColumn(name="id_type")
-//	  private TypeUtilisateur typeUtilisateur;
-//	  
-//	  @OneToMany (mappedBy="utilisateur", fetch=FetchType.LAZY)
-//	  private List<Appartement> appartements;
 }

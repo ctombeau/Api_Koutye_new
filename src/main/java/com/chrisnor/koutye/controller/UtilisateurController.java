@@ -29,6 +29,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -107,10 +108,14 @@ public class UtilisateurController {
 
 	
 	@PostMapping(value="/user/add")
-	public ResponseEntity<Response> ajouterUtilisateur(@RequestBody UtilisateurDto utilisateurDto)
+	public ResponseEntity<Response> ajouterUtilisateur(@Valid @RequestBody UtilisateurDto utilisateurDto,
+			BindingResult bindingResult)
 	 {
-		
-		if(utilService.getUtilisateur(utilisateurDto.getUsername()) == null
+		if (bindingResult.hasErrors()) {
+	        String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
+	        return responseGenerator.ErrorResponse(HttpStatus.BAD_REQUEST, "Uniquement des chiffres au champ téléphone.");
+	    }
+		else if(utilService.getUtilisateur(utilisateurDto.getUsername()) == null
 				&& utilService.getUtilisateurByEmail(utilisateurDto.getEmail()) == null)
 		{
 			UtilisateurDto util = utilService.postUtilisateur(utilisateurDto);
@@ -118,7 +123,7 @@ public class UtilisateurController {
 		}
 		else
 		{
-			return responseGenerator.ErrorResponse(HttpStatus.CONFLICT, "Utilisateur existe deja");
+			return responseGenerator.ErrorResponse(HttpStatus.CONFLICT, "Utilisateur existe dejà.");
 		}
 	}
 	

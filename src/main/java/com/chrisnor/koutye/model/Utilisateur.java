@@ -33,6 +33,7 @@ import jakarta.persistence.TemporalType;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Null;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -76,6 +77,7 @@ public class Utilisateur implements Serializable{
   
   @Column(nullable=false)
   @NotEmpty
+  @Pattern(regexp = "^[0-9]+$", message = "Le numéro de téléphone doit contenir uniquement des chiffres")
   private String phone;
   
   @Column(nullable=true, length=64)

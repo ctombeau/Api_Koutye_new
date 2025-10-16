@@ -94,11 +94,7 @@ public class AppartementController {
 	public ResponseEntity<?> showAppartementByCommune(@RequestParam String commune)
 	{
 		List<Appartement> apps = appService.getAppartementByCommune(commune);
-		/*
-		List<AppartementDto> appDtos = apps.stream()
-			                                .map(AppartementDto::new)
-			                                .collect(Collectors.toList());
-	    */
+		
 		if(apps != null)
 			return responseGenerator.SuccessResponse(HttpStatus.OK,apps);
 		else
