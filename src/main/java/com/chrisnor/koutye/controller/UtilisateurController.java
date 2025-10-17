@@ -113,7 +113,7 @@ public class UtilisateurController {
 	 {
 		if (bindingResult.hasErrors()) {
 	        String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
-	        return responseGenerator.ErrorResponse(HttpStatus.BAD_REQUEST, "Uniquement des chiffres au champ téléphone.");
+	        return responseGenerator.ErrorResponse(HttpStatus.BAD_REQUEST, "Uniquement des chiffres au champ téléphone et/ou un champ obligatoire n'est pas renseigné.");
 	    }
 		else if(utilService.getUtilisateur(utilisateurDto.getUsername()) == null
 				&& utilService.getUtilisateurByEmail(utilisateurDto.getEmail()) == null)
