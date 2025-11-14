@@ -178,15 +178,20 @@ public class UtilisateurController {
 			return responseGenerator.SuccessResponse(HttpStatus.OK, utilDto);
 		} else {
 			
-			return responseGenerator.ErrorResponse(HttpStatus.NO_CONTENT, "Utilisateur non trouve");
+			return responseGenerator.ErrorResponse(HttpStatus.NO_CONTENT, "Utilisateur non trouvé");
 		}
 	}
 
 	@PutMapping("/user/update/{id}")
-	public ResponseEntity<Response> UpdateUser(@PathVariable Long id, @RequestBody UtilisateurDto utilDto) {
+	public ResponseEntity<Response> UpdateUser(@Valid @PathVariable Long id, @RequestBody UtilisateurDto utilDto,
+			BindingResult bindingResult) {
 		UtilisateurDto util = new UtilisateurDto();
 		util = utilService.putUtilisateur(id, utilDto);
-		if(util != null) 
+		if (bindingResult.hasErrors()) {
+	        String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
+	        return responseGenerator.ErrorResponse(HttpStatus.BAD_REQUEST, "Uniquement des chiffres au champ téléphone et/ou un champ obligatoire n'est pas renseigné.");
+	    }
+		else if(util != null) 
 			return responseGenerator.SuccessResponse(HttpStatus.OK, util);
 		else
 			return responseGenerator.ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Erreur lors de la mofification de l'utilisateur");	

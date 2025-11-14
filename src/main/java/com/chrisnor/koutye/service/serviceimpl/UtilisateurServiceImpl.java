@@ -172,17 +172,9 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	public Optional<UtilisateurDto> getUtilisateur(String username) {
         
 	    Utilisateur util = utilisateurRepo.findUtilisateurByUsername(username);
-	                     //.orElseThrow(()-> new UsernameNotFoundException("user not found for username: "+username));
-		
-		if(util != null)
-		{
-			return Optional.of(modelMapper.map(util, UtilisateurDto.class));
-		}
-		else
-		{
-			return null;
-		}
-		
+	    
+	    return Optional.ofNullable(util)
+	               .map(u -> modelMapper.map(u, UtilisateurDto.class));
 	}
 
 	@Override
@@ -299,14 +291,9 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 	@Override
 	public Optional<UtilisateurDto> getUtilisateurByEmail(String email) {
 		Utilisateur util = utilisateurRepo.findUtilisateurByEmail(email);
-		if(util != null)
-		{
-			return Optional.of(modelMapper.map(util, UtilisateurDto.class));
-		}
-		else
-		{
-			return null;
-		}
+		return Optional.ofNullable(util)
+	               .map(u -> modelMapper.map(u, UtilisateurDto.class));
+		
 	}
 
 	@Override
