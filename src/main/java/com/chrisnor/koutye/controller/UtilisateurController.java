@@ -185,9 +185,11 @@ public class UtilisateurController {
 	@PutMapping("/user/update/{id}")
 	public ResponseEntity<Response> UpdateUser(@Valid @PathVariable Long id, @RequestBody UtilisateurDto utilDto,
 			BindingResult bindingResult) {
+		System.out.println("dans la methode");
 		UtilisateurDto util = new UtilisateurDto();
 		util = utilService.putUtilisateur(id, utilDto);
 		if (bindingResult.hasErrors()) {
+			System.out.println("Erreur binding");
 	        String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
 	        return responseGenerator.ErrorResponse(HttpStatus.BAD_REQUEST, "Uniquement des chiffres au champ téléphone et/ou un champ obligatoire n'est pas renseigné.");
 	    }
