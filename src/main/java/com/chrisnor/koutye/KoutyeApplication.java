@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.EventListener;
@@ -29,11 +31,16 @@ import com.chrisnor.koutye.service.UtilisateurService;
 
 @SpringBootApplication
 @Configuration
-public class KoutyeApplication {
-	@Autowired
-	private EmailService emailService;
+public class KoutyeApplication extends SpringBootServletInitializer{
+	//@Autowired
+	//private EmailService emailService;
 	
 	protected static final Logger logger = LogManager.getLogger();
+	
+	 @Override
+	 protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+	     return application.sources(KoutyeApplication.class);
+	 }
 	
 	public static void main(String[] args) {
 		SpringApplication.run(KoutyeApplication.class, args);

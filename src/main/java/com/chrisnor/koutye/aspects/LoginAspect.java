@@ -60,7 +60,7 @@ public class LoginAspect {
 		logger.info("Duree d'execution: "+(t2-t1));
 		logger.info("---------------------------------------------------");
 		*/
-		UtilisateurServiceImpl utilServiceImpl = (UtilisateurServiceImpl) joinPoint.getTarget();
-		utilServiceImpl.Login(username, password);
+		//UtilisateurServiceImpl utilServiceImpl = (UtilisateurServiceImpl) joinPoint.getTarget();
+		//utilServiceImpl.Login(username, password);
 	}
 }

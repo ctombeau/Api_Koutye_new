@@ -126,47 +126,7 @@ public class UtilisateurServiceImpl implements UtilisateurService{
 
 	@Override
 	public UtilisateurDto putUtilisateur(Long id, UtilisateurDto utilDto) {
-		//Utilisateur util = utilisateurRepo.findById(id).get();
-		//Utilisateur utilBase = new Utilisateur();
-		//utilBase = utilisateurRepo.getById(id);
-		/*
-		if(utilBase.getEmail().equals(utilDto.getEmail()) && utilBase.getUsername().equalsIgnoreCase(utilDto.getUsername()))
-		{
-			return this.setUpdate(id, utilDto);
-		}
-		else {
-			if(!utilBase.getEmail().equals(utilDto.getEmail())){
-				if(this.getUtilisateurByEmail(utilDto.getEmail()) != null) {
-					return null;
-				}
-				else {
-					return this.setUpdate(id, utilDto);
-					
-				}
-				
-			}
-			else if(!utilBase.getUsername().equalsIgnoreCase(utilDto.getUsername())){
-				if(this.getUtilisateur(utilDto.getUsername()) != null) {
-					return null;
-				}
-				else {
-					return this.setUpdate(id, utilDto);
-					
-				}
-			}
-			else {
-				if(this.getUtilisateur(utilDto.getUsername()) == null && this.getUtilisateurByEmail(utilDto.getEmail()) != null ) {
-					return this.setUpdate(id, utilDto);
-					
-				}
-				else {
-					
-					return null;
-				}
 		
-		  }
-		}
-		*/
 		return this.setUpdate(id, utilDto);
 	}
 

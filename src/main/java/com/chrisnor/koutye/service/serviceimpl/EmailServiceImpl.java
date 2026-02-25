@@ -21,7 +21,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
 @Service
-@Component
+//@Component
 public class EmailServiceImpl implements EmailService{
 	
 	@Autowired
@@ -42,7 +42,7 @@ public class EmailServiceImpl implements EmailService{
 		mailMessage.setSubject(subject);
 		
 		mailSender.send(mailMessage);
-		System.out.println("Mail envoye avec succes");
+		System.out.println("Mail envoyé avec succès");
 	}
 
 	@Override

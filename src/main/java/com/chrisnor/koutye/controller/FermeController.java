@@ -37,10 +37,11 @@ public class FermeController {
 		else
 			return responseGenerator.ErrorResponse(HttpStatus.NOT_FOUND, "Cet appartement n'existe pas");
 	}
-	
+	/*
 	@GetMapping("/transform")
 	public String transformImage() throws IOException {
 		ConvertImage ci = new ConvertImage();
 		return ci.extractBytes("C:/Koutye_Folder/ImageApp/1/back.webp");
 	}
+	*/
 }

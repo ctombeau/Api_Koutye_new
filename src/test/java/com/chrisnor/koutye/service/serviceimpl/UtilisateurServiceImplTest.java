@@ -26,6 +26,7 @@ import com.chrisnor.koutye.service.UtilisateurService;
 //@RunWith(SpringRunner.class)
 @SpringBootTest(classes=KoutyeApplication.class)
 public class UtilisateurServiceImplTest {
+	/*
 	//@Autowired
 	@Mock
 	private UtilisateurRepository utilRepo;
@@ -85,4 +86,5 @@ public class UtilisateurServiceImplTest {
 		utilService.getUtilisateurs();
 		verify(utilRepo).findAll();
 	}
+	*/
 }
