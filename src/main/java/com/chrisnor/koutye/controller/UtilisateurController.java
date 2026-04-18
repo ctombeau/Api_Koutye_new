@@ -111,12 +111,19 @@ public class UtilisateurController {
 	public ResponseEntity<Response> ajouterUtilisateur(@Valid @RequestBody UtilisateurDto utilisateurDto,
 			BindingResult bindingResult)
 	 {
+		boolean usernameExiste = utilService
+	            .getUtilisateur(utilisateurDto.getUsername())
+	            .isPresent();
+
+	    boolean emailExiste = utilService
+	            .getUtilisateurByEmail(utilisateurDto.getEmail())
+	            .isPresent();
+	    
 		if (bindingResult.hasErrors()) {
 	        String errorMessage = bindingResult.getAllErrors().get(0).getDefaultMessage();
 	        return responseGenerator.ErrorResponse(HttpStatus.BAD_REQUEST, "Uniquement des chiffres au champ téléphone et/ou un champ obligatoire n'est pas renseigné.");
 	    }
-		else if(utilService.getUtilisateur(utilisateurDto.getUsername()) == null
-				&& utilService.getUtilisateurByEmail(utilisateurDto.getEmail()) == null)
+		else if(!usernameExiste && !emailExiste)
 		{
 			UtilisateurDto util = utilService.postUtilisateur(utilisateurDto);
 			return responseGenerator.SuccessResponse(HttpStatus.CREATED, util);
