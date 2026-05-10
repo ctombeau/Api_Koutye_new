@@ -87,7 +87,7 @@ public class AppartementController {
 		if(apps != null)
 			return responseGenerator.SuccessResponse(HttpStatus.OK,apps);
 		else
-			return responseGenerator.ErrorResponse(HttpStatus.NO_CONTENT, "aucune donnee trouvee");
+			return responseGenerator.ErrorResponse(HttpStatus.NO_CONTENT, "aucune donnée trouvee");
 	}
 	
 	@GetMapping("/appartement/show-by-commune")
@@ -95,10 +95,10 @@ public class AppartementController {
 	{
 		List<Appartement> apps = appService.getAppartementByCommune(commune);
 		
-		if(apps != null)
+		if(!apps.isEmpty())
 			return responseGenerator.SuccessResponse(HttpStatus.OK,apps);
 		else
-			return responseGenerator.ErrorResponse(HttpStatus.NO_CONTENT, "aucune donnee trouvee");
+			return responseGenerator.ErrorResponse(HttpStatus.NOT_FOUND, "aucune donnée trouvee");
 	}
 	
 	@PostMapping("/appartement/add-image")

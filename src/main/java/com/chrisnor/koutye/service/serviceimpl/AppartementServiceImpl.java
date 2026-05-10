@@ -144,7 +144,10 @@ public class AppartementServiceImpl implements AppartementService{
 		List<Appartement> apps = new ArrayList<>();
 		adr.forEach(a->{
 			Appartement app = appRepo.findByAdresse(a);
-			apps.add(app);
+			if(app != null) {
+	            apps.add(app);
+	            System.out.println(app.getAppartementId());
+	        }
 			System.out.println(app.getAppartementId());
 		});
 		
