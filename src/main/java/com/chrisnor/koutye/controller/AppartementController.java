@@ -79,12 +79,8 @@ public class AppartementController {
 	public ResponseEntity<?> showAppartementByUsername(@RequestParam String username)
 	{
 		List<Appartement> apps = appService.getAppartementByUsername(username);
-		/*
-		List<AppartementDto> appDtos = apps.stream()
-                 							.map(AppartementDto::new)
-                 							.collect(Collectors.toList());
-         */
-		if(apps != null)
+		
+		if(!apps.isEmpty())
 			return responseGenerator.SuccessResponse(HttpStatus.OK,apps);
 		else
 			return responseGenerator.ErrorResponse(HttpStatus.NO_CONTENT, "aucune donnée trouvee");
