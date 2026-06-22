@@ -78,25 +78,57 @@ public class AppartementController {
 	@GetMapping("/appartement/show-by-username")
 	public ResponseEntity<?> showAppartementByUsername(@RequestParam String username)
 	{
-		List<Appartement> apps = appService.getAppartementByUsername(username);
-		
-		if(!apps.isEmpty())
-			return responseGenerator.SuccessResponse(HttpStatus.OK,apps);
-		else
-			return responseGenerator.ErrorResponse(HttpStatus.NO_CONTENT, "aucune donnée trouvee");
+		try {
+            if (username == null || username.trim().isEmpty()) {
+                return ResponseEntity
+                        .badRequest()
+                        .body("Le paramètre 'username' est obligatoire.");
+            }
+
+            List<Appartement> apps = appService.getAppartementByUsername(username);
+
+            return responseGenerator.SuccessResponse(HttpStatus.OK,apps);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erreur serveur lors de la récupération des appartements.");
+        }
 	}
 	
 	@GetMapping("/appartement/show-by-commune")
+	  public ResponseEntity<?> getByCommune(@RequestParam String commune) {
+
+        try {
+            if (commune == null || commune.trim().isEmpty()) {
+                return ResponseEntity
+                        .badRequest()
+                        .body("Le paramètre 'commune' est obligatoire.");
+            }
+
+            List<Appartement> apps = appService.getAppartementByCommune(commune);
+
+            return responseGenerator.SuccessResponse(HttpStatus.OK,apps);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erreur serveur lors de la récupération des appartements.");
+        }
+    }
+	/*
 	public ResponseEntity<?> showAppartementByCommune(@RequestParam String commune)
 	{
 		List<Appartement> apps = appService.getAppartementByCommune(commune);
 		
-		if(!apps.isEmpty())
+		//if(!apps.isEmpty())
 			return responseGenerator.SuccessResponse(HttpStatus.OK,apps);
-		else
-			return responseGenerator.ErrorResponse(HttpStatus.NOT_FOUND, "aucune donnée trouvee");
+		//else
+		//	return responseGenerator.ErrorResponse(HttpStatus.NOT_FOUND, "aucune donnée trouvee");
 	}
-	
+	*/
 	@PostMapping("/appartement/add-image")
 	public ResponseEntity<?> addImageAppartement(@RequestParam Long idApp, @RequestParam List<MultipartFile> images)
 	{
