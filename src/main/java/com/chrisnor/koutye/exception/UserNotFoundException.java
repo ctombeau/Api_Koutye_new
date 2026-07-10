@@ -2,9 +2,9 @@ package com.chrisnor.koutye.exception;
 
 public class UserNotFoundException extends RuntimeException{
 	
-	public UserNotFoundException()
+	public UserNotFoundException(String message)
 	{
-		super("Utilisateur non trouve");
+		super(message);
 	}
 
 }

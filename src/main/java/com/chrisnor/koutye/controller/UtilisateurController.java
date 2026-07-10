@@ -54,6 +54,7 @@ import com.chrisnor.koutye.dto.LoginForgetPasswordDto;
 import com.chrisnor.koutye.dto.UtilisateurDto;
 import com.chrisnor.koutye.dto.UtilisateurFileDto;
 import com.chrisnor.koutye.exception.FileNotFoundException;
+import com.chrisnor.koutye.exception.UserNotFoundException;
 import com.chrisnor.koutye.file.FileUpload;
 import com.chrisnor.koutye.model.ApiResponse;
 import com.chrisnor.koutye.model.Utilisateur;
@@ -72,6 +73,8 @@ import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.NoSuchElementException;
+
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RestController
@@ -265,8 +268,15 @@ public class UtilisateurController {
 		
 		if(utilService.verifyEmail(emailTo) && utilService.verifyEmail(emailFrom))
 		{
-			 utilFrom = utilService.getUtilisateurByEmail(emailFrom).get();
-			 utilTo = utilService.getUtilisateurByEmail(emailTo).get();
+			 //utilFrom = utilService.getUtilisateurByEmail(emailFrom).get();
+			 //utilTo = utilService.getUtilisateurByEmail(emailTo).get();
+			 
+			 utilFrom = utilService.getUtilisateurByEmail(emailFrom).orElseThrow(
+					 ()-> new UserNotFoundException("Ce propriétaire n'existe pas.")
+				);
+			 utilTo = utilService.getUtilisateurByEmail(emailTo).orElseThrow(
+					 ()-> new UserNotFoundException("Ce courtier n'existe pas.")
+			   );
 			 
 			 if(utilFrom.getNomType().equals("Proprietaire") && utilTo.getNomType().equals("Courtier"))
 			 {
